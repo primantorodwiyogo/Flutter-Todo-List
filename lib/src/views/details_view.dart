@@ -23,16 +23,35 @@ class _DetailViewState extends State<DetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          onPressed: () {
-            context.read<TodoBloc>().add(const FetchTodos());
-            Navigator.pop(context);
-          },
-        ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: BlocBuilder<TodoBloc, TodoState>(builder: (context, state) {
+          if (state is DisplaySpecificTodo) {
+            // Todo currentTodo = state.todo;
+            return AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+                onPressed: () {
+                  context.read<TodoBloc>().add(const FetchTodos());
+                  Navigator.pop(context);
+                },
+              ),
+              centerTitle: true,
+              title: CustomText(
+                  text: (state.todo.isImportant == true
+                          ? 'important'
+                          : 'not important')
+                      .toUpperCase()),
+              // backgroundColor: state.color,
+            );
+          }
+          return Container(
+            color: Colors.white,
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        }),
       ),
       body: Container(
         padding: const EdgeInsets.all(8),
@@ -46,38 +65,43 @@ class _DetailViewState extends State<DetailView> {
                 children: [
                   // CustomText(text: 'title'.toUpperCase()),
                   const SizedBox(height: 10),
-                  TextFormField(
-                      initialValue: currentTodo.title, enabled: false),
-                  const SizedBox(height: 10),
-                  // CustomText(text: 'description'.toUpperCase()),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    initialValue: currentTodo.description,
-                    enabled: false,
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                          title: Column(
+                            children: [
+                              TextFormField(
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                                initialValue: currentTodo.title.toUpperCase(),
+                                enabled: false,
+                                maxLines: 3,
+                              ),
+                              TextFormField(
+                                textAlign: TextAlign.justify,
+                                initialValue: currentTodo.description,
+                                enabled: false,
+                                maxLines: 5,
+                              ),
+                            ],
+                          ),
+                          subtitle: Align(
+                            alignment: Alignment.topRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Create Date'),
+                                CustomText(
+                                    text: DateFormat.yMMMEd()
+                                        .format(state.todo.createdTime)),
+                              ],
+                            ),
+                          )),
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(text: 'date made'.toUpperCase()),
-                      CustomText(
-                          text: DateFormat.yMMMEd()
-                              .format(state.todo.createdTime)),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  // CustomText(text: 'date made'.toUpperCase()),
-                  const SizedBox(height: 10),
-                  // CustomText(
-                      // text: DateFormat.yMMMEd().format(state.todo.createdTime)),
-                  const SizedBox(height: 10),
-                  // CustomText(text: 'important / not important'.toUpperCase()),
-                  const SizedBox(height: 10),
-                  CustomText(
-                      text: (state.todo.isImportant == true
-                              ? 'important'
-                              : 'not important')
-                          .toUpperCase()),
-                  const SizedBox(height: 10),
+
                   ElevatedButton(
                       onPressed: () {
                         showDialog(
