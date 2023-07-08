@@ -46,14 +46,14 @@ class _HomeState extends State<Home> {
         child: BlocBuilder<TodoBloc, TodoState>(builder: (context, state) {
           if (state is DisplayTodos) {
             return AppBar(
-              centerTitle: true,
-              title: Text('You have ${state.todo.length} List'),
-              // backgroundColor: state.color,
-            );
+                centerTitle: true,
+                title: Text('You have ${state.todo.length} List')
+                // backgroundColor: state.color,
+                );
           }
           return Container(
-            color: Colors.white,
-            child: const Center(child: CircularProgressIndicator()),
+            color: Colors.blue,
+            // child: const Center(child: CircularProgressIndicator()),
           );
         }),
       ),

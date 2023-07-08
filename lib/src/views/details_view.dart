@@ -34,8 +34,8 @@ class _DetailViewState extends State<DetailView> {
                   Icons.arrow_back,
                 ),
                 onPressed: () {
-                  context.read<TodoBloc>().add(const FetchTodos());
                   Navigator.pop(context);
+                  context.read<TodoBloc>().add(const FetchTodos());
                 },
               ),
               centerTitle: true,
@@ -47,9 +47,11 @@ class _DetailViewState extends State<DetailView> {
               // backgroundColor: state.color,
             );
           }
-          return Container(
-            color: Colors.white,
-            child: const Center(child: CircularProgressIndicator()),
+          return Center(
+            child: Container(
+              color: Colors.white,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
           );
         }),
       ),
@@ -125,7 +127,8 @@ class _DetailViewState extends State<DetailView> {
                                             child: Text('Title')),
                                         Flexible(
                                           child: TextFormField(
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
+                                              hintText: currentTodo.title,
                                               isDense: true,
                                             ),
                                             maxLines: 1,
@@ -139,7 +142,8 @@ class _DetailViewState extends State<DetailView> {
                                         Flexible(
                                           child: TextFormField(
                                             controller: _newDescription,
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
+                                              hintText: currentTodo.title,
                                               isDense: true,
                                             ),
                                             maxLines: 2,
