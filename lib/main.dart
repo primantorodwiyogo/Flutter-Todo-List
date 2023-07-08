@@ -130,12 +130,13 @@ class _HomeState extends State<Home> {
                                                                 .todo[i].id!));
                                                     ScaffoldMessenger.of(
                                                             context)
-                                                        .showSnackBar(
-                                                            const SnackBar(
-                                                      duration: Duration(
+                                                        .showSnackBar(SnackBar(
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      duration: const Duration(
                                                           milliseconds: 500),
-                                                      content:
-                                                          Text("deleted todo"),
+                                                      content: Text(
+                                                          '${state.todo[i].title} has been delete'),
                                                     ));
                                                   },
                                                   icon: const Icon(
