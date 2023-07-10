@@ -176,41 +176,76 @@ class _DetailViewState extends State<DetailView> {
                                             },
                                             child: const Text('Cancel'),
                                           ),
-                                          ElevatedButton(
-                                            style: Constants.customButtonStyle,
-                                            onPressed: () async {
-                                              context.read<TodoBloc>().add(
-                                                    UpdateTodo(
-                                                      todo: Todo(
-                                                        id: currentTodo.id,
-                                                        createdTime:
-                                                            DateTime.now(),
-                                                        description:
-                                                            _newDescription
-                                                                .text,
-                                                        isImportant:
-                                                            toggleSwitch,
-                                                        number:
-                                                            currentTodo.number,
-                                                        title: _newTitle.text,
+                                          BlocBuilder<TodoBloc, TodoState>(
+                                            builder: (context, state) {
+                                              return ElevatedButton(
+                                                style:
+                                                    Constants.customButtonStyle,
+                                                onPressed: () async {
+                                                  if (_newTitle
+                                                          .text.isNotEmpty &&
+                                                      _newDescription
+                                                          .text.isNotEmpty) {
+                                                    context
+                                                        .read<TodoBloc>()
+                                                        .add(
+                                                          UpdateTodo(
+                                                            todo: Todo(
+                                                              id: currentTodo
+                                                                  .id,
+                                                              createdTime:
+                                                                  DateTime
+                                                                      .now(),
+                                                              description:
+                                                                  _newDescription
+                                                                      .text,
+                                                              isImportant:
+                                                                  toggleSwitch,
+                                                              number:
+                                                                  currentTodo
+                                                                      .number,
+                                                              title: _newTitle
+                                                                  .text,
+                                                            ),
+                                                          ),
+                                                        );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                      backgroundColor: Constants
+                                                          .primaryColor,
+                                                      duration:
+                                                          Duration(seconds: 1),
+                                                      content: Text(
+                                                          'Todo details updated'),
+                                                    ));
+                                                    Navigator.of(context)
+                                                        .popUntil((route) =>
+                                                            route.isFirst);
+                                                    context
+                                                        .read<TodoBloc>()
+                                                        .add(
+                                                            const FetchTodos());
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      content: Text(
+                                                        "title and description fields must not be blank"
+                                                            .toUpperCase(),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black),
                                                       ),
-                                                    ),
-                                                  );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                backgroundColor:
-                                                    Constants.primaryColor,
-                                                duration: Duration(seconds: 1),
-                                                content: Text(
-                                                    'Todo details updated'),
-                                              ));
-                                              Navigator.of(context).popUntil(
-                                                  (route) => route.isFirst);
-                                              context
-                                                  .read<TodoBloc>()
-                                                  .add(const FetchTodos());
+                                                    ));
+                                                  }
+                                                },
+                                                child: const Text('Update '),
+                                              );
                                             },
-                                            child: const Text('Update '),
                                           ),
                                         ],
                                       );
